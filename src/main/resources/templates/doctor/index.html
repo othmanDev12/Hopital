@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="template"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Doctor</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.2/css/bootstrap.min.css">
+</head>
+<body>
+<div layout:fragment="content">
+    <h1>Doctors List</h1>
+    <div class="row m-2">
+        <form method="get" th:action="@{/doctor}">
+            <label>Key word</label>
+            <input type="text" name="keyword" th:value="${keyword}">
+            <button type="submit" class="btn btn-primary">Chercher</button>
+        </form>
+    </div>
+    <div class="container">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>LastName</th>
+                <th>FirstName</th>
+                <th>Email</th>
+                <th>Status</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="doctor : ${doctors}">
+                <td th:text="${doctor.getLastName()}"></td>
+                <td th:text="${doctor.getFirstName()}"></td>
+                <td th:text="${doctor.getEmail()}"></td>
+                <td th:text="${doctor.getStatu()}"></td>
+                <td>
+                    <a onclick="return confirm('Etes vous sure?')" class="btn btn-danger" th:href="@{doctor/delete(id=${doctor.id}, keyword=${keyword}, page=${currentPage})}">
+                        Delete
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <ul class="nav nav-pills">
+            <li th:each="page,status:${pages}">
+                <a th:class="${status.index==currentPage?'btn btn-primary ms-1':'btn btn-outline-primary ms-1'}"
+                   th:text="${status.index}"
+                   th:href="@{/doctor(page=${status.index}, keyword=${keyword})}"
+                ></a>
+            </li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>
